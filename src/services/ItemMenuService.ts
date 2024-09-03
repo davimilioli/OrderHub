@@ -42,7 +42,7 @@ class ItemMenuService {
                 data_criacao: data.data_criacao,
             });
 
-            return { mensagem: 'Item criado com sucesso!', item: item };
+            return { item };
 
         } catch(error){
             console.error(error);

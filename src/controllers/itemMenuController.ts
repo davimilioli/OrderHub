@@ -29,17 +29,34 @@ class ItemMenuController {
     public static async create(req: Request, res: Response){
         const itemMenuService = new ItemMenuService();
         const { nome, descricao, preco, categoria, imagem } = req.body;
+
+        if(!nome || !descricao || !preco || !categoria) {
+            return sendResponse(res, 400, null, {
+                mensagem: 'Os campos nome, descricao, preco e categoria são obrigatórios.'
+            });
+        }
+
         const data: ItemMenuAttributes = { 
             nome,
             descricao,
             preco,
             categoria,
             imagem,
-            data_criacao: new Date()
+            data_criacao: new Date(),
+            data_atualizacao: new Date()
         };
 
         const createItem = await itemMenuService.createItem(data);
-        res.status(201).json({ createItem });
+
+        if(createItem.error){
+            return sendResponse(res, 500, null, {
+                mensagem: `Não foi possível criar o item ${nome}`,
+            });
+        }
+
+        return sendResponse(res, 201, {
+            mensagem: `O item ${nome} foi criado com sucesso`,
+        });
     }
 }
 
