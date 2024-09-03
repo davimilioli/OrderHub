@@ -1,11 +1,30 @@
 import ItemMenu, { ItemMenuAttributes } from "../models/ItemMenu";
+import { formartDate } from "../utils/formatDate";
 
 class ItemMenuService {
 
-    public async getMenu(){
+    public async getMenu(page: number = 1, pageSize: number = 12){
         try {
-            const items: ItemMenuAttributes[] = await ItemMenu.findAll();
-            return items;
+            const offset = ( page - 1 ) * pageSize;
+            let { rows: result, count: total} = await ItemMenu.findAndCountAll({
+                offset: offset,
+                limit: pageSize,
+                order: [['id', 'ASC']]
+            });
+
+            const itens = result.map((item) => ({
+                ...item.toJSON(),
+                data_criacao: formartDate(item.data_criacao.toISOString()),
+                data_atualizacao: formartDate(item.data_atualizacao.toISOString())
+            }));
+
+            return {
+                total,
+                page,
+                pageSize,
+                itens
+            }
+
         } catch (error) {
             console.error('Erro ao buscar itens do menu:', error);
             return { mensagem: 'Ocorreu algum erro ao consultar o menu', error };
