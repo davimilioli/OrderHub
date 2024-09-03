@@ -17,9 +17,7 @@ class ItemMenuController {
 
         if(menuItems.error){
             return sendResponse(res, 500, null, {
-                mensagem: 'Erro ao buscar itens do menu',
-                error: menuItems.error,
-                code: 500
+                mensagem: 'Erro ao buscar itens do menu'
             });
         }
 
