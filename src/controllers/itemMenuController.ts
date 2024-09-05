@@ -2,10 +2,11 @@ import { Response, Request } from "express";
 import { ItemMenuAttributes } from "../models/ItemMenu";
 import ItemMenuService from "../services/ItemMenuService";
 import { sendResponse } from "../utils/responseHandler";
+import { SendResponseList } from "../interfaces/SendResponseList";
 
 class ItemMenuController {
 
-    public static async index(req: Request, res: Response){
+    public static async index(req: Request, res: Response): Promise<Response>{
         let page: number = parseInt(req.query.page as string) || 1;
         let pageSize: number = parseInt(req.query.pageSize as string) || 12;
 
@@ -13,7 +14,7 @@ class ItemMenuController {
         if(isNaN(pageSize) || pageSize <= 0 ) pageSize = 12;
 
         const itemMenuService = new ItemMenuService();
-        const menuItems = await itemMenuService.getMenu(page, pageSize);
+        const menuItems: SendResponseList = await itemMenuService.getMenu(page, pageSize);
 
         if(menuItems.error){
             return sendResponse(res, 500, null, {
@@ -26,7 +27,7 @@ class ItemMenuController {
         })
     } 
 
-    public static async create(req: Request, res: Response){
+    public static async create(req: Request, res: Response): Promise<Response>{
         const itemMenuService = new ItemMenuService();
         const { nome, descricao, preco, categoria, imagem } = req.body;
 

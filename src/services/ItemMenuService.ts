@@ -1,9 +1,11 @@
+import { Response } from "express";
 import ItemMenu, { ItemMenuAttributes } from "../models/ItemMenu";
 import { formartDate } from "../utils/formatDate";
+import { SendResponseList } from "../interfaces/SendResponseList";
 
 class ItemMenuService {
 
-    public async getMenu(page: number = 1, pageSize: number = 12){
+    public async getMenu(page: number = 1, pageSize: number = 12): Promise<SendResponseList>{
         try {
             const offset = ( page - 1 ) * pageSize;
             let { rows: result, count: total} = await ItemMenu.findAndCountAll({
@@ -26,12 +28,12 @@ class ItemMenuService {
             }
 
         } catch (error) {
-            console.error('Erro ao buscar itens do menu:', error);
-            return { mensagem: 'Ocorreu algum erro ao consultar o menu', error };
+            console.error(error);
+            throw new Error('Erro ao consultar o menu');
         }
     }
 
-    public async createItem(data: ItemMenuAttributes) {
+    public async createItem(data: ItemMenuAttributes): Promise<{ error?: any; item?: string }> {
         try {
             const item = await ItemMenu.create({
                 nome: data.nome,
@@ -42,11 +44,12 @@ class ItemMenuService {
                 data_criacao: data.data_criacao,
             });
 
-            return { item };
+            const nomeItem: string = item.dataValues.nome
+            return {item: nomeItem } ;
 
         } catch(error){
             console.error(error);
-            return { mensagem: 'Ocorreu algum erro ao criar um novo item', error };
+            throw new Error('Erro ao criar um novo item');
         }
     }
 }

@@ -8,8 +8,8 @@ export interface ItemMenuAttributes {
     preco: number
     categoria: 'entrada' | 'comida' | 'bebida' | 'sobremesa'
     imagem?: string
-    data_criacao: Date
-    data_atualizacao?: Date
+    data_criacao: Date | string
+    data_atualizacao?: Date | string
 }
 
 interface ItemMenuCreationAttributes extends Optional<ItemMenuAttributes, 'id'>{}
