@@ -3,6 +3,7 @@ import { ItemMenuAttributes } from "../models/ItemMenu";
 import ItemMenuService from "../services/ItemMenuService";
 import { sendResponse } from "../utils/responseHandler";
 import { SendResponseList } from "../interfaces/SendResponseList";
+import ImageService from "../services/ImageService";
 
 class ItemMenuController {
 
@@ -29,7 +30,7 @@ class ItemMenuController {
 
     public static async create(req: Request, res: Response): Promise<Response>{
         const itemMenuService = new ItemMenuService();
-        const { nome, descricao, preco, categoria, imagem } = req.body;
+        const { nome, descricao, preco, categoria } = req.body;
 
         if(!nome || !descricao || !preco || !categoria) {
             return sendResponse(res, 400, null, {
@@ -42,7 +43,6 @@ class ItemMenuController {
             descricao,
             preco,
             categoria,
-            imagem,
             data_criacao: new Date(),
             data_atualizacao: new Date()
         };
@@ -58,6 +58,17 @@ class ItemMenuController {
         return sendResponse(res, 201, {
             mensagem: `O item ${nome} foi criado com sucesso`,
         });
+    }
+
+    public static upload(req: Request, res: Response): any {
+        const imageService = new ImageService
+        const image = req.file
+
+        if(!image){
+            return;
+        }
+        
+        imageService.processImage(image); 
     }
 }
 
