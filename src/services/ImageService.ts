@@ -1,10 +1,16 @@
 import path, { join } from "path";
-import { existsSync, mkdirSync, renameSync } from "fs";
+import { existsSync, mkdirSync, renameSync, unlinkSync } from "fs";
 
 class ImageService {
 
-    public processImage(image: Express.Multer.File): string {
+    public processImage(image: Express.Multer.File): string | null {
+        const typeImages = ['image/jpeg', 'image/png', 'image/jpg'];
         const uploadDir = join(__dirname, '../../uploads');
+
+        if (!typeImages.includes(image.mimetype)) {
+            unlinkSync(image.path);
+            return null;
+        }
         
         if(!existsSync(uploadDir)){
             mkdirSync(uploadDir);

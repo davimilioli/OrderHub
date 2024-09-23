@@ -41,7 +41,13 @@ class ItemMenuController{
         }
 
         if(req.file){
-           imagem =  imageService.processImage(req.file);
+           imagem = imageService.processImage(req.file);
+
+           if(imagem == null){
+                return sendResponse(res, 400, null, {
+                    mensagem: 'Formato de imagem inválido. Apenas JPEG, PNG e JPG são permitidos'
+                });
+           }
         } 
 
         const data: ItemMenuAttributes = { 
