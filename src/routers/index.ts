@@ -4,10 +4,9 @@ import ItemMenuController from "../controllers/itemMenuController";
 
 const router = Router();
 const upload = multer({ dest: 'uploads/' });
+console.log(upload)
 
 router.get('/menu',ItemMenuController.index);
-router.post('/menu', ItemMenuController.create);
-router.post('/upload', upload.single('image') , ItemMenuController.upload);
-
+router.post('/menu', upload.single('imagem') ,ItemMenuController.create);
 
 export default router;

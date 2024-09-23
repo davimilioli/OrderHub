@@ -7,7 +7,7 @@ export interface ItemMenuAttributes {
     descricao: string
     preco: number
     categoria: 'entrada' | 'comida' | 'bebida' | 'sobremesa'
-    imagem?: string | File | null
+    imagem?: string | null | undefined
     data_criacao: Date | string
     data_atualizacao?: Date | string
 }
@@ -20,7 +20,7 @@ export class ItemMenu extends Model<ItemMenuAttributes, ItemMenuCreationAttribut
     public descricao!: string;
     public preco!: number;
     public categoria!: 'entrada' | 'comida' | 'bebida' | 'sobremesa';
-    public imagem!: string | File | null;
+    public imagem!: string | null | undefined;
     public data_criacao!: Date;
     public data_atualizacao!: Date;
 }
